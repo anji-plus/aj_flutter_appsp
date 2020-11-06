@@ -132,8 +132,3 @@ import 'package:aj_flutter_appsp/aj_flutter_appsp_lib.dart';
 [https://github.com/anji-plus/aj_flutter_appsp](https://github.com/anji-plus/aj_flutter_appsp)
 
 
-如有集成问题，请加我们微信群交流：
-
-![appsp微信群](https://upload-images.jianshu.io/upload_images/1801706-bfc97af5b0d036a3.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/320)
-
-
