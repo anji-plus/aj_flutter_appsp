@@ -47,22 +47,16 @@ import 'package:aj_flutter_appsp/aj_flutter_appsp_lib.dart';
 
 其中SpRespUpdateModel包括字段有
 ```
-    //     apk下载/跳转的url
+    //apk下载/跳转的url
     public String url;
-    //      如果是true，表示外部url，被认为需要跳转到网页进行下载，比如跳转到应用宝下载
-	//      否则直接在应用内部下载，下载的方式开发者可自行定义，也可参考我们提供的Demo
+    //如果是true，表示外部url，被认为需要跳转到网页进行下载，比如跳转到应用宝下载
+    //否则直接在应用内部下载，下载的方式开发者可自行定义，也可参考我们提供的Demo
     public boolean isExternalUrl;
-    //      是否需要弹出更新提示，true表示需要
+    //是否需要弹出更新提示，true表示需要
     public boolean showUpdate;
-    //      是否需要强制更新，true表示需要强更，此时需要阻断用户操作，如果不更新则退出APP
+    // 是否需要强制更新，true表示需要强更，此时需要阻断用户操作，如果不更新则退出APP
     public boolean mustUpdate;
-    //      状态码，文件下载过程中可能出现异常，状态码分为
-	//      AppSpStatusCode.StatusCode_Success ： 成功
-	//      AppSpStatusCode.StatusCode_Cancel  ： 用户已取消json文件下载
-	//      AppSpStatusCode.StatusCode_Timeout ： 服务器json文件地址连接超时
-	//      AppSpStatusCode.StatusCode_UrlFormatError ： 请求地址格式错误
-    public int statusCode;
-    //      更新日志
+    //更新日志
     public String updateLog;
 ```
 
