@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 
-/// Copyright @ 2018 anji-plus
+/// Copyright © 2018 anji-plus
 /// 安吉加加信息技术有限公司
 /// http://www.anji-plus.com
 /// All rights reserved.
