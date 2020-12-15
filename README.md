@@ -66,12 +66,6 @@ import 'package:aj_flutter_appsp/aj_flutter_appsp_lib.dart';
         await AjFlutterAppSp.getUpdateModel();
 ```
 
-```
-    //版本更新
-   SpRespUpdateModel updateModel =
-        await AjFlutterAppSp.getUpdateModel();
-```
-
 其中SpRespUpdateModel包括字段有
 ```
     //     apk下载/跳转网页的url，如果有.apk，认为可下载，否则跳转网页
