@@ -4,18 +4,18 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 
-/// Copyright ? 2018 anji-plus
-/// °²¼ª¼Ó¼ÓĞÅÏ¢¼¼ÊõÓĞÏŞ¹«Ë¾
+/// Copyright Â© 2018 anji-plus
+/// å®‰å‰åŠ åŠ ä¿¡æ¯æŠ€æœ¯æœ‰é™å…¬å¸
 /// http://www.anji-plus.com
 /// All rights reserved.
-/// AppSp¹¦ÄÜ
+/// AppSpåŠŸèƒ½
 class AjFlutterAppSp {
   static const MethodChannel _channel = const MethodChannel('aj_flutter_appsp');
 
-  ///ÉèÖÃ»ù´¡µØÖ·£¬Èç¹ûÔÚ¿ª·¢²âÊÔ³¡¾°»áÓÃµ½£¬Éú²úÊ±ºò¼ÇµÃ¸Ä³ÉÉú²úµØÖ·£¬»òÕß×îºÃ²»Òª¶Ô±©Â¶set·½·¨
-  ///[appKey] Ó¦ÓÃÎ¨Ò»±êÊ¶
-  ///[host] ÉèÖÃÇëÇó»ù´¡µØÖ·
-  ///[debug] ÊÇ·ñ´ò¿ªÈÕÖ¾¿ª¹Ø£¬trueÎª´ò¿ª
+  ///è®¾ç½®åŸºç¡€åœ°å€ï¼Œå¦‚æœåœ¨å¼€å‘æµ‹è¯•åœºæ™¯ä¼šç”¨åˆ°ï¼Œç”Ÿäº§æ—¶å€™è®°å¾—æ”¹æˆç”Ÿäº§åœ°å€ï¼Œæˆ–è€…æœ€å¥½ä¸è¦å¯¹æš´éœ²setæ–¹æ³•
+  ///[appKey] åº”ç”¨å”¯ä¸€æ ‡è¯†
+  ///[host] è®¾ç½®è¯·æ±‚åŸºç¡€åœ°å€
+  ///[debug] æ˜¯å¦æ‰“å¼€æ—¥å¿—å¼€å…³ï¼Œtrueä¸ºæ‰“å¼€
   static Future<String> init(
       {String appKey, String host, bool debug = true}) async {
     final String result = await _channel.invokeMethod(
@@ -23,19 +23,19 @@ class AjFlutterAppSp {
     return result;
   }
 
-  ///»ñÈ¡°æ±¾ĞÅÏ¢
+  ///è·å–ç‰ˆæœ¬ä¿¡æ¯
   static Future<SpRespUpdateModel> getUpdateModel() async {
     final String jsonStr = await _channel.invokeMethod('getUpdateModel');
     SpRespUpdateModel updateModel =
-        SpRespUpdateModel.fromJson(json.decode(jsonStr));
+    SpRespUpdateModel.fromJson(json.decode(jsonStr));
     return updateModel;
   }
 
-  ///»ñÈ¡¹«¸æĞÅÏ¢
+  ///è·å–å…¬å‘Šä¿¡æ¯
   static Future<SpRespNoticeModel> getNoticeModel() async {
     final String jsonStr = await _channel.invokeMethod('getNoticeModel');
     SpRespNoticeModel noticeModel =
-        SpRespNoticeModel.fromJson(json.decode(jsonStr));
+    SpRespNoticeModel.fromJson(json.decode(jsonStr));
     return noticeModel;
   }
 }
