@@ -1,5 +1,6 @@
 # aj_flutter_appsp
 # Flutter集成 - 版本更新
+# AppSp 的体验地址是：http://open-appsp.anji-plus.com
 ### host配置
 
 ```
@@ -16,10 +17,10 @@
 aj_flutter_appsp:
     git:
       url: https://github.com/anji-plus/aj_flutter_appsp.git
-      ref: ^0.0.1
+      ref: 0.0.2
 
 ```
-其中ref表示版本名，对应仓库的tag号
+其中ref表示版本名，对应仓库的tag号,也可以用^0.0.1，
 ^表示用最新版本，如果指定版本，请忽略此符号
 
 ### 获取插件，终端输入
@@ -37,26 +38,50 @@ import 'package:aj_flutter_appsp/aj_flutter_appsp_lib.dart';
 ```
 
 ### 调用（详细使用请参考插件的example）
+#### 在main.dart中，初始化
+```
+
+ @override
+  void initState() {
+    super.initState();
+    _initAppSp();
+  }
+
+  _initAppSp() async {
+    //初始化,appKey和host根据应用需要配置
+    var debuggable = !bool.fromEnvironment("dart.vm.product");
+    await AjFlutterAppSp.init(
+        appKey: "aadcfae6215a4e0f9bf5bc5edccb1045",
+        host: "http://open-appsp.anji-plus.com/sp/",
+        debug: debuggable);
+  }
+  
+```
+
+#### 在版本更新页面
 
 ```
-    //举例，调用时请替换掉此appKey
-   String appKey = "24b14615101b4fe0ab9595d6e1d5e428";
+    //版本更新
    SpRespUpdateModel updateModel =
-        await AjFlutterAppSp.getUpdateModel(appKey: appKey);
+        await AjFlutterAppSp.getUpdateModel();
+```
+
+```
+    //版本更新
+   SpRespUpdateModel updateModel =
+        await AjFlutterAppSp.getUpdateModel();
 ```
 
 其中SpRespUpdateModel包括字段有
 ```
-    //apk下载/跳转的url
-    public String url;
-    //如果是true，表示外部url，被认为需要跳转到网页进行下载，比如跳转到应用宝下载
-    //否则直接在应用内部下载，下载的方式开发者可自行定义，也可参考我们提供的Demo
-    public boolean isExternalUrl;
-    //是否需要弹出更新提示，true表示需要
+    //     apk下载/跳转网页的url，如果有.apk，认为可下载，否则跳转网页
+    public String downloadUrl;
+   
+    //      是否需要弹出更新提示，true表示需要
     public boolean showUpdate;
-    // 是否需要强制更新，true表示需要强更，此时需要阻断用户操作，如果不更新则退出APP
+    //      是否需要强制更新，true表示需要强更，此时需要阻断用户操作，如果不更新则退出APP
     public boolean mustUpdate;
-    //更新日志
+    //      更新日志
     public String updateLog;
 ```
 
@@ -108,21 +133,27 @@ import 'package:aj_flutter_appsp/aj_flutter_appsp_lib.dart';
 # Flutter集成 - 公告
 ### 引用
 
+
 ```
 import 'package:aj_flutter_appsp/aj_flutter_appsp_lib.dart';
 ```
 
 ### 调用（详细使用请参考插件的example）
 ```
-    //举例，调用时请替换掉此appKey
-    String appKey = "24b14615101b4fe0ab9595d6e1d5e428";
+    //公告
+    
     SpRespNoticeModel noticeModel =
-        await AjFlutterAppSp.getNoticeModel(appKey: appKey);
+        await AjFlutterAppSp.getNoticeModel();
 ```
 ### 插件下载
 若要参考具体集成流程，可参考我们提供的插件，
 插件下载地址：
 
 [https://github.com/anji-plus/aj_flutter_appsp](https://github.com/anji-plus/aj_flutter_appsp)
+
+
+如有集成问题，请加我们微信群交流：
+
+![appsp微信群](https://upload-images.jianshu.io/upload_images/1801706-bfc97af5b0d036a3.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/320)
 
 

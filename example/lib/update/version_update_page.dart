@@ -7,7 +7,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:aj_flutter_appsp_example/dialog_utils.dart';
 import 'package:aj_flutter_appsp_example/styles.dart';
 import 'package:aj_flutter_appsp_example/update/version_update_dialog.dart';
+import 'package:aj_flutter_appsp_example/update/version_update_dialog_new.dart';
 
+///版本更新页面
 class VersionUpdatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,6 @@ enum UpdateType {
 }
 
 class _VersionUpdateState extends State<VersionUpdateWidget> {
-  static const String appKey = "24b14615101b4fe0ab9595d6e1d5e428";
 
   @override
   void initState() {
@@ -42,7 +43,7 @@ class _VersionUpdateState extends State<VersionUpdateWidget> {
     //无需改造数据，用服务器返回数据，下面的都是模拟的数据
     //ignore
     SpRespUpdateModel updateModel =
-        await AjFlutterAppSp.getUpdateModel(appKey: appKey);
+        await AjFlutterAppSp.getUpdateModel();
     if (!mounted) {
       return;
     }
@@ -80,6 +81,7 @@ class _VersionUpdateState extends State<VersionUpdateWidget> {
       );
       return;
     }
+    //apk结尾的默认为可直接下载，否认当作一个外部网页
     if (updateModel != null &&
         updateModel.downloadUrl != null &&
         updateModel.downloadUrl.contains(".apk")) {
@@ -174,7 +176,9 @@ class _VersionUpdateState extends State<VersionUpdateWidget> {
     showDialog(
         context: context,
         builder: (context) {
-          VersionUpdateDialog messageDialog = new VersionUpdateDialog(
+          // VersionUpdateDialog messageDialog = new VersionUpdateDialog(
+          //周阳 修改
+          VersionUpdateDialogNew messageDialog = new VersionUpdateDialogNew(
             positiveText: "更新",
             versionMsgList: logs,
             mustUpdate: mustUpdate,

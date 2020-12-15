@@ -8,6 +8,7 @@ import 'package:aj_flutter_appsp_example/notice/notice_dialog.dart';
 import 'package:aj_flutter_appsp_example/notice/notice_type.dart';
 import 'package:aj_flutter_appsp_example/styles.dart';
 
+///公告页
 class NoticePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,6 @@ class NoticeWidget extends StatefulWidget {
 }
 
 class _NoticeState extends State<NoticeWidget> {
-  static const String appKey = "24b14615101b4fe0ab9595d6e1d5e428";
   List<SpNoticeModelItem> marqueeeItems = [];
   var _scaffoldkey = new GlobalKey<ScaffoldState>();
 
@@ -35,8 +35,7 @@ class _NoticeState extends State<NoticeWidget> {
   _requestNoticeType(String noticeType) async {
     //无需改造数据，用服务器返回数据，下面的都是模拟的数据
     //ignore
-    SpRespNoticeModel noticeModel =
-        await AjFlutterAppSp.getNoticeModel(appKey: appKey);
+    SpRespNoticeModel noticeModel = await AjFlutterAppSp.getNoticeModel();
     if (!mounted) {
       return;
     }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:aj_flutter_appsp/aj_flutter_appsp_lib.dart';
 import 'package:aj_flutter_appsp_example/notice/notice_page.dart';
 import "styles.dart";
 import 'package:aj_flutter_appsp_example/update/version_update_page.dart';
@@ -20,6 +20,16 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    _initAppSp();
+  }
+
+  _initAppSp() async {
+    //初始化
+    var debuggable = !bool.fromEnvironment("dart.vm.product");
+    await AjFlutterAppSp.init(
+        appKey: "aadcfae6215a4e0f9bf5bc5edccb1045",
+        host: "http://open-appsp.anji-plus.com/sp/",
+        debug: debuggable);
   }
 
   //跳转到版本更新
