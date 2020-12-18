@@ -10,19 +10,26 @@
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-//    版本更新
-  if ([call.method isEqualToString: @"getUpdateModel"]) {
-      NSString *appKey = call.arguments[@"appKey"];
-      [[AppSpService shareService] setAppkeyWithAppKey:appKey];
+    // 初始化版本
+    if ([call.method isEqualToString: @"init"]){
+        NSString *appKey = call.arguments[@"appKey"];
+        NSString *host = call.arguments[@"host"];
+        NSString *debug = call.arguments[@"debug"];
+        if (host != nil && host.length > 0) {
+            [[AppSpService shareService] initConfigWithAppkey:appKey debug:debug :host];
+        } else {
+            [[AppSpService shareService] initConfigWithAppkey:appKey debug:debug :nil];
+        }
+    } else if ([call.method isEqualToString: @"getUpdateModel"]) {
+    // 版本更新
       __weak typeof(self) weakSelf = self;
       [[AppSpService shareService] checkVersionUpdateWithSuccess:^(NSDictionary* repData) {
           result([weakSelf formateDictToJSonString:repData]);
       } failure:^(NSDictionary* errorData) {
           result([weakSelf formateDictToJSonString:errorData]);
       }];
-  } else if ([call.method isEqualToString:@"getNoticeModel"]) {//通知栏
-      NSString *appKey = call.arguments[@"appKey"];
-      [[AppSpService shareService] setAppkeyWithAppKey:appKey];
+    } else if ([call.method isEqualToString:@"getNoticeModel"]) {
+    //获取公告信息
       __weak typeof(self) weakSelf = self;
       [[AppSpService shareService] getNoticeInfoWithSuccess:^(NSDictionary* repData) {
           result([weakSelf formateDictToJSonString:repData]);
@@ -30,9 +37,9 @@
           result([weakSelf formateDictToJSonString:errorData]);
       }];
       
-  } else {
+    } else {
       result(FlutterMethodNotImplemented);
-  }
+    }
 }
 
 //字典转jsonstring

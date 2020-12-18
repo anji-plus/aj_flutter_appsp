@@ -15,7 +15,7 @@ A new Flutter plugin.
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'AJSDKAppSp', '0.0.2'
+  s.dependency 'AJSDKAppSp', '0.0.3'
 
   s.ios.deployment_target = '8.0'
 end
