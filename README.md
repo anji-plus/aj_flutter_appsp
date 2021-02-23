@@ -17,7 +17,7 @@
 aj_flutter_appsp:
     git:
       url: https://github.com/anji-plus/aj_flutter_appsp.git
-      ref: 0.0.2
+      ref: 0.0.3
 
 ```
 其中ref表示版本名，对应仓库的tag号,也可以用^0.0.1，
