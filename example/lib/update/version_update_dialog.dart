@@ -95,9 +95,9 @@ class VersionUpdateWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    if (Platform.isIOS) {
-      return new _iOSVersionUpdateWidgetState();
-    }
+//    if (Platform.isIOS) {
+//      return new _iOSVersionUpdateWidgetState();
+//    }
     return new _VersionUpdateWidgetState();
   }
 }
@@ -120,7 +120,6 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
       height: 12,
     ));
 
-
     if (widget.versionMsgList != null) {
       msgItems = widget.versionMsgList.map((msg) {
         return Container(
@@ -130,7 +129,10 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
             style: TextStyle(fontSize: 15.0 / scale, color: Color(0xFF666666)),
           ),
           alignment: Alignment.centerLeft,
-          margin: EdgeInsets.only(left: 12, right: 12,),
+          margin: EdgeInsets.only(
+            left: 12,
+            right: 12,
+          ),
         );
       }).toList();
     }
@@ -182,7 +184,7 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
         color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius:
-          BorderRadius.only(bottomLeft: Radius.circular(widget.radius)),
+              BorderRadius.only(bottomLeft: Radius.circular(widget.radius)),
         ),
         child: Container(
           alignment: Alignment.center,
@@ -212,7 +214,7 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
         color: widget.buttonColor,
         shape: RoundedRectangleBorder(
           borderRadius:
-          BorderRadius.only(bottomRight: Radius.circular(widget.radius)),
+              BorderRadius.only(bottomRight: Radius.circular(widget.radius)),
         ),
         child: Container(
           alignment: Alignment.center,
@@ -221,7 +223,7 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
               child: Center(
                 child: Text('更新',
                     style:
-                    TextStyle(color: Colors.white, fontSize: 16.0 / scale)),
+                        TextStyle(color: Colors.white, fontSize: 16.0 / scale)),
               ),
               onTap: () {
                 //开始下载
@@ -268,20 +270,20 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
         '.apk');
     Response response = await dio.download(apkUrl, file.path,
         onReceiveProgress: (received, total) {
-          print("total" + total.toString() + " received " + received.toString());
-          double ratio = received / total;
-          setState(() {
-            widget.rate = ratio;
-          });
-          ratio = ratio * 100;
-          print("rate" + ratio.toString() + "%");
-          if (ratio >= 100) {
-            setState(() {
-              updateButtonEnable = true;
-            });
-            _notifyInstall(file);
-          }
+      print("total" + total.toString() + " received " + received.toString());
+      double ratio = received / total;
+      setState(() {
+        widget.rate = ratio;
+      });
+      ratio = ratio * 100;
+      print("rate" + ratio.toString() + "%");
+      if (ratio >= 100) {
+        setState(() {
+          updateButtonEnable = true;
         });
+        _notifyInstall(file);
+      }
+    });
   }
 
   _notifyInstall(File file) async {
@@ -306,299 +308,169 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
   @override
   Widget build(BuildContext context) {
     var scale = MediaQuery.of(context).textScaleFactor;
-    return new Material(
-      color: Colors.transparent,
-      child:new Stack(
-        alignment: Alignment.center,
-        children: [
-
-          //整个白色块的定义 (包含内容部分和 升级提示语)
-          new Positioned(
-            top: 200,
-            left: 10,
-            right: 10,
-            child: new Column(
-              children: [
-                new Container(
-                  width:400,
-                  height: widget.versionMsgList.length>=5?300:250,
-                  margin: const EdgeInsets.only(left: 20.0, right: 20.0,),
-                  decoration: ShapeDecoration(
-                    color: Color(0xffffffff),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(widget.radius),
-                      ),
-                    ),
-                  ),
-
-                  //标题和内容
-                  child: new Container(height: 150,
-                    margin: EdgeInsets.only(top: widget.versionMsgList.length>=5?45:60,bottom: 50),
-                    child:
-                    new Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        new Container(margin: EdgeInsets.only(bottom: 10),child: new Text("哇,发现新版本了!",style: TextStyle(fontSize: 16/scale),),),
-                        new Container(height:widget.versionMsgList.length>=5? 90:60,child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: widget.versionMsgList.length,
-                          itemBuilder: (context,index){
-                            return new Container(
-                                margin: EdgeInsets.only(left: 10),
-                                child: Text.rich(TextSpan(text: widget.versionMsgList[index],style: TextStyle(fontSize: 12/scale,color: Colors.grey),),maxLines: 10,));
-                          },
-                        ),)
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          //上面的logo部分
-          new Positioned(
-              top:100,
-              child:new Image.asset("images/version.png",width: 250/scale,height: 250/scale,scale: scale,)
-          ),
-
-          //右上角X的定义
-          new Positioned(
-              top:220,
-              right: 45,
-              child: new GestureDetector(child: new Container(width: 15,height: 15,child: new Image.asset("images/icon_dissmiss.png",)),
-                onTap: (){
-                  if (widget.mustUpdate) {
-                    NavigatorUtils.popApp();
-                  } else {
-                    Navigator.of(context).pop();
-                  }
-                },
-              )
-          ),
-
-          //进度条的定义
-          new Positioned(
-              left: 40,
-              right: 40,
-              top: widget.versionMsgList.length>=5?450:400,
-              child: widget.isExternalUrl != true?
-              LinearProgressIndicator(
-                backgroundColor: widget.buttonColor,
-                valueColor:
-                AlwaysStoppedAnimation<Color>(widget.titleColor),
-                value: widget.rate,
-              )
-                  : new SizedBox(height: 0.1,)),
-
-          //立即下载按钮的定义
-          new Positioned(
-              top:widget.versionMsgList.length>=5?500-widget.barHeight/2:475-widget.barHeight,
-              child:
-              new Container(
-                alignment: Alignment.center,
-                height: widget.barHeight,
-                width: 200,
-                margin: EdgeInsets.only(left: 20,right: 20),
-                child: new GestureDetector(
-                    onTap: () {
-                      //开始下载
-                      if (widget.isExternalUrl == false) {
-                        downloadFile(widget.url);
-                      } else {
-                        //跳转到外部浏览器下载
-                        NavigatorUtils.launchInBrowser(widget.url);
-                      }
-                    },child: ButtonFactory.getRoundLargeBtn(
-                    context,
-                    text: "立即更新",
-                    highlightGradientColors: [
-                      Color.fromRGBO(156, 124, 254, 1),
-                      Color.fromRGBO(103, 104, 254, 1)
-                    ],
-                    textColor: Colors.white,
-                    fontSize: 18,
-                    height: widget.barHeight,
-                    radius: widget.barHeight / 2,
-                    onTap: (){
-                      //开始下载
-                      if (widget.isExternalUrl == false) {
-                        downloadFile(widget.url);
-                      } else {
-                        //跳转到外部浏览器下载
-                        NavigatorUtils.launchInBrowser(widget.url);
-                      }
-                    }
-                )),
-              )
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _iOSVersionUpdateWidgetState extends State<VersionUpdateWidget> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  List<Widget> getVersionLayout() {
-    var scale = MediaQuery.of(context).textScaleFactor;
-    List<Widget> list = [];
-    List<Widget> msgItems = [];
-    list.add(SizedBox(
-      height: 12,
-    ));
-    if (widget.versionMsgList != null) {
-      msgItems = widget.versionMsgList.map((msg) {
-        return Container(
-          constraints: BoxConstraints(minHeight: 24),
-          child: new Text(
-            msg,
-            style: TextStyle(fontSize: 15.0 / scale, color: Color(0xFF666666)),
-          ),
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.only(left: 12, right: 12),
-        );
-      }).toList();
-    }
-    list.addAll(msgItems);
-    list.add(SizedBox(
-      height: 12,
-    ));
-    return list;
-  }
-
-  Widget getDivider({double height = 1.0}) {
-    return Container(
-      color: Color(0xFFf0f0f0),
-      height: height,
-    );
-  }
-
-  Widget _buildOperationBar() {
-    //widget.mustUpdate
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          widget.mustUpdate
-              ? Container()
-              : new Expanded(
-            flex: 1,
-            child: _getNegativeWidget(),
-          ),
-          new Expanded(
-            flex: 1,
-            child: _getPositiveWidget(),
-          ),
-        ]);
-  }
-
-  Widget _getNegativeWidget() {
-    var scale = MediaQuery.of(context).textScaleFactor;
-    return Material(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius:
-          BorderRadius.only(bottomLeft: Radius.circular(widget.radius)),
-        ),
-        child: Container(
-          alignment: Alignment.center,
-          height: widget.barHeight,
-          child: InkWell(
-              child: Center(
-                child: Text('取消',
-                    style: TextStyle(
-                        color: Color(0xFF333333), fontSize: 16.0 / scale)),
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(widget.radius))),
-        ));
-  }
-
-  Widget _getPositiveWidget() {
-    var scale = MediaQuery.of(context).textScaleFactor;
-    return Material(
-        color: widget.buttonColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: widget.mustUpdate
-              ? BorderRadius.only(
-              bottomLeft: Radius.circular(widget.radius),
-              bottomRight: Radius.circular(widget.radius))
-              : BorderRadius.only(bottomRight: Radius.circular(widget.radius)),
-        ),
-        child: Container(
-          alignment: Alignment.center,
-          height: widget.barHeight,
-          child: InkWell(
-              child: Center(
-                child: Text('更新',
-                    style:
-                    TextStyle(color: Colors.white, fontSize: 16.0 / scale)),
-              ),
-              onTap: () {
-                NavigatorUtils.gotoAppstore(context, widget.url);
-              },
-              borderRadius: widget.mustUpdate
-                  ? BorderRadius.only(
-                  bottomLeft: Radius.circular(widget.radius),
-                  bottomRight: Radius.circular(widget.radius))
-                  : BorderRadius.only(
-                  bottomRight: Radius.circular(widget.radius))),
-        ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    var scale = MediaQuery.of(context).textScaleFactor;
     return new WillPopScope(
-      child: new Padding(
-        padding: const EdgeInsets.only(left: 40.0, right: 40.0),
-        child: new Material(
-          type: MaterialType.transparency,
-          child: new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              new Container(
-                decoration: ShapeDecoration(
-                  color: Color(0xffffffff),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(widget.radius),
+      child: new Material(
+        color: Colors.transparent,
+        child: new Stack(
+          alignment: Alignment.center,
+          children: [
+            //整个白色块的定义 (包含内容部分和 升级提示语)
+            new Positioned(
+              top: 200,
+              left: 10,
+              right: 10,
+              child: new Column(
+                children: [
+                  new Container(
+                    width: 400,
+                    height: widget.versionMsgList.length >= 5 ? 300 : 250,
+                    margin: const EdgeInsets.only(
+                      left: 20.0,
+                      right: 20.0,
+                    ),
+                    decoration: ShapeDecoration(
+                      color: Color(0xffffffff),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(widget.radius),
+                        ),
+                      ),
+                    ),
+
+                    //标题和内容
+                    child: new Container(
+                      height: 150,
+                      margin: EdgeInsets.only(
+                          top: widget.versionMsgList.length >= 5 ? 45 : 60,
+                          bottom: 50),
+                      child: new Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          new Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            child: new Text(
+                              "哇,发现新版本了!",
+                              style: TextStyle(fontSize: 16 / scale),
+                            ),
+                          ),
+                          new Container(
+                            height: widget.versionMsgList.length >= 5 ? 90 : 60,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: widget.versionMsgList.length,
+                              itemBuilder: (context, index) {
+                                return new Container(
+                                    margin: EdgeInsets.only(left: 10),
+                                    child: Text.rich(
+                                      TextSpan(
+                                        text: widget.versionMsgList[index],
+                                        style: TextStyle(
+                                            fontSize: 12 / scale,
+                                            color: Colors.grey),
+                                      ),
+                                      maxLines: 10,
+                                    ));
+                              },
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                child: new Column(
-                  children: <Widget>[
-                    new Container(
-                      child: new Text(
-                        '新版发布',
-                        style: TextStyle(
-                            fontSize: 20.0 / scale, color: widget.titleColor),
-                      ),
-                      height: 36,
-                      margin: EdgeInsets.only(top: 6),
-                      alignment: Alignment.center,
-                    ),
-                    new Container(
-                      constraints: BoxConstraints(minHeight: widget.minHeight),
-                      child: Column(
-                        children: getVersionLayout(),
-                      ),
-                    ),
-                    getDivider(),
-                    this._buildOperationBar(),
-                  ],
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+
+            //上面的logo部分
+            new Positioned(
+                top: 100,
+                child: new Image.asset(
+                  "images/version.png",
+                  width: 250 / scale,
+                  height: 250 / scale,
+                  scale: scale,
+                )),
+
+            //右上角X的定义
+            new Positioned(
+                top: 220,
+                right: 45,
+                child: new GestureDetector(
+                  child: new Container(
+                      width: 15,
+                      height: 15,
+                      child: new Image.asset(
+                        "images/icon_dissmiss.png",
+                      )),
+                  onTap: () {
+                    if (widget.mustUpdate) {
+                      NavigatorUtils.popApp();
+                    } else {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                )),
+
+            //进度条的定义
+            new Positioned(
+                left: 40,
+                right: 40,
+                top: widget.versionMsgList.length >= 5 ? 450 : 400,
+                child: widget.isExternalUrl != true
+                    ? LinearProgressIndicator(
+                        backgroundColor: widget.buttonColor,
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(widget.titleColor),
+                        value: widget.rate,
+                      )
+                    : new SizedBox(
+                        height: 0.1,
+                      )),
+
+            //立即下载按钮的定义
+            new Positioned(
+                top: widget.versionMsgList.length >= 5
+                    ? 500 - widget.barHeight / 2
+                    : 475 - widget.barHeight,
+                child: new Container(
+                  alignment: Alignment.center,
+                  height: widget.barHeight,
+                  width: 200,
+                  margin: EdgeInsets.only(left: 20, right: 20),
+                  child: new GestureDetector(
+                      onTap: () {
+                        //开始下载
+                        if (widget.isExternalUrl == false) {
+                          downloadFile(widget.url);
+                        } else {
+                          //跳转到外部浏览器下载
+                          NavigatorUtils.launchInBrowser(widget.url);
+                        }
+                      },
+                      child: ButtonFactory.getRoundLargeBtn(context,
+                          text: "立即更新",
+                          highlightGradientColors: [
+                            Color.fromRGBO(156, 124, 254, 1),
+                            Color.fromRGBO(103, 104, 254, 1)
+                          ],
+                          textColor: Colors.white,
+                          fontSize: 18,
+                          height: widget.barHeight,
+                          radius: widget.barHeight / 2, onTap: () {
+                        //开始下载
+                        if (widget.isExternalUrl == false) {
+                          if (Platform.isAndroid) {
+                            downloadFile(widget.url);
+                          } else {
+                            NavigatorUtils.gotoAppstore(context, widget.url);
+                          }
+                        } else {
+                          //跳转到外部浏览器下载
+                          NavigatorUtils.launchInBrowser(widget.url);
+                        }
+                      })),
+                )),
+          ],
         ),
       ),
       onWillPop: () {
