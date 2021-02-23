@@ -7,7 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:aj_flutter_appsp_example/dialog_utils.dart';
 import 'package:aj_flutter_appsp_example/styles.dart';
 import 'package:aj_flutter_appsp_example/update/version_update_dialog.dart';
-import 'package:aj_flutter_appsp_example/update/version_update_dialog_new.dart';
+import 'package:aj_flutter_appsp_example/update/version_update_dialog.dart';
 
 ///版本更新页面
 class VersionUpdatePage extends StatelessWidget {
@@ -178,7 +178,7 @@ class _VersionUpdateState extends State<VersionUpdateWidget> {
         builder: (context) {
           // VersionUpdateDialog messageDialog = new VersionUpdateDialog(
           //周阳 修改
-          VersionUpdateDialogNew messageDialog = new VersionUpdateDialogNew(
+          VersionUpdateDialog messageDialog = new VersionUpdateDialog(
             positiveText: "更新",
             versionMsgList: logs,
             mustUpdate: mustUpdate,

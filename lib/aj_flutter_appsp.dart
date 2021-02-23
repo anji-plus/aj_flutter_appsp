@@ -18,8 +18,8 @@ class AjFlutterAppSp {
   ///[debug] 是否打开日志开关，true为打开
   static Future<String> init(
       {String appKey, String host, bool debug = true}) async {
-    final String result = await _channel.invokeMethod(
-        'init', {"appKey": appKey, "host": host, "debug": debug});
+    final String result = await _channel
+        .invokeMethod('init', {"appKey": appKey, "host": host, "debug": debug});
     return result;
   }
 
@@ -27,7 +27,7 @@ class AjFlutterAppSp {
   static Future<SpRespUpdateModel> getUpdateModel() async {
     final String jsonStr = await _channel.invokeMethod('getUpdateModel');
     SpRespUpdateModel updateModel =
-    SpRespUpdateModel.fromJson(json.decode(jsonStr));
+        SpRespUpdateModel.fromJson(json.decode(jsonStr));
     return updateModel;
   }
 
@@ -35,7 +35,14 @@ class AjFlutterAppSp {
   static Future<SpRespNoticeModel> getNoticeModel() async {
     final String jsonStr = await _channel.invokeMethod('getNoticeModel');
     SpRespNoticeModel noticeModel =
-    SpRespNoticeModel.fromJson(json.decode(jsonStr));
+        SpRespNoticeModel.fromJson(json.decode(jsonStr));
     return noticeModel;
+  }
+
+  ///版本升级
+  static Future<String> installApk(Map map) async {
+    final String data =
+        await _channel.invokeMethod('installApk', map);
+    return data;
   }
 }

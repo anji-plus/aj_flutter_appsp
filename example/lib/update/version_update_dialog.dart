@@ -6,9 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
-
-import 'package:aj_flutter_appsp_example/commons.dart';
+import 'package:aj_flutter_appsp/aj_flutter_appsp_lib.dart';
 import 'package:aj_flutter_appsp_example/navigator_utils.dart';
+import '../button_factory.dart';
+import 'package:aj_flutter_appsp_example/button_factory.dart';
 
 // ignore: must_be_immutable
 class VersionUpdateDialog extends Dialog {
@@ -102,9 +103,9 @@ class VersionUpdateWidget extends StatefulWidget {
 }
 
 class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
-  static const apkInstallChannel =
-      const MethodChannel(Commons.apkinstallChannel);
-  static const String apkInstallMethod = Commons.apkInstallMethod;
+//  static const apkInstallChannel =
+//  const MethodChannel(Commons.apkinstallChannel);
+//  static const String apkInstallMethod = Commons.apkInstallMethod;
 
   @override
   void initState() {
@@ -118,6 +119,8 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
     list.add(SizedBox(
       height: 12,
     ));
+
+
     if (widget.versionMsgList != null) {
       msgItems = widget.versionMsgList.map((msg) {
         return Container(
@@ -127,7 +130,7 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
             style: TextStyle(fontSize: 15.0 / scale, color: Color(0xFF666666)),
           ),
           alignment: Alignment.centerLeft,
-          padding: EdgeInsets.only(left: 12, right: 12),
+          margin: EdgeInsets.only(left: 12, right: 12,),
         );
       }).toList();
     }
@@ -136,8 +139,8 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
       height: 20,
     ));
     if (widget.isExternalUrl != true) {
-      list.add(Padding(
-        padding: EdgeInsets.only(left: 6, right: 6),
+      list.add(Container(
+        margin: EdgeInsets.only(left: 6, right: 6),
         child: LinearProgressIndicator(
           backgroundColor: widget.buttonColor,
           valueColor: AlwaysStoppedAnimation<Color>(widget.titleColor),
@@ -179,7 +182,7 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
         color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius:
-              BorderRadius.only(bottomLeft: Radius.circular(widget.radius)),
+          BorderRadius.only(bottomLeft: Radius.circular(widget.radius)),
         ),
         child: Container(
           alignment: Alignment.center,
@@ -209,7 +212,7 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
         color: widget.buttonColor,
         shape: RoundedRectangleBorder(
           borderRadius:
-              BorderRadius.only(bottomRight: Radius.circular(widget.radius)),
+          BorderRadius.only(bottomRight: Radius.circular(widget.radius)),
         ),
         child: Container(
           alignment: Alignment.center,
@@ -218,7 +221,7 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
               child: Center(
                 child: Text('更新',
                     style:
-                        TextStyle(color: Colors.white, fontSize: 16.0 / scale)),
+                    TextStyle(color: Colors.white, fontSize: 16.0 / scale)),
               ),
               onTap: () {
                 //开始下载
@@ -265,20 +268,20 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
         '.apk');
     Response response = await dio.download(apkUrl, file.path,
         onReceiveProgress: (received, total) {
-      print("total" + total.toString() + " received " + received.toString());
-      double ratio = received / total;
-      setState(() {
-        widget.rate = ratio;
-      });
-      ratio = ratio * 100;
-      print("rate" + ratio.toString() + "%");
-      if (ratio >= 100) {
-        setState(() {
-          updateButtonEnable = true;
+          print("total" + total.toString() + " received " + received.toString());
+          double ratio = received / total;
+          setState(() {
+            widget.rate = ratio;
+          });
+          ratio = ratio * 100;
+          print("rate" + ratio.toString() + "%");
+          if (ratio >= 100) {
+            setState(() {
+              updateButtonEnable = true;
+            });
+            _notifyInstall(file);
+          }
         });
-        _notifyInstall(file);
-      }
-    });
   }
 
   _notifyInstall(File file) async {
@@ -294,7 +297,7 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
 
   _pushAndInstall() async {
     try {
-      await apkInstallChannel.invokeMethod(apkInstallMethod, _fileMap);
+      await AjFlutterAppSp.installApk(_fileMap);
     } on PlatformException catch (e) {
       print("dart -PlatformException ");
     } finally {}
@@ -303,55 +306,135 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
   @override
   Widget build(BuildContext context) {
     var scale = MediaQuery.of(context).textScaleFactor;
-    return new WillPopScope(
-      child: new Material(
-        color: Colors.transparent,
-        child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Container(
-              margin: const EdgeInsets.only(left: 40.0, right: 40.0),
-              decoration: ShapeDecoration(
-                color: Color(0xffffffff),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(widget.radius),
+    return new Material(
+      color: Colors.transparent,
+      child:new Stack(
+        alignment: Alignment.center,
+        children: [
+
+          //整个白色块的定义 (包含内容部分和 升级提示语)
+          new Positioned(
+            top: 200,
+            left: 10,
+            right: 10,
+            child: new Column(
+              children: [
+                new Container(
+                  width:400,
+                  height: widget.versionMsgList.length>=5?300:250,
+                  margin: const EdgeInsets.only(left: 20.0, right: 20.0,),
+                  decoration: ShapeDecoration(
+                    color: Color(0xffffffff),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(widget.radius),
+                      ),
+                    ),
+                  ),
+
+                  //标题和内容
+                  child: new Container(height: 150,
+                    margin: EdgeInsets.only(top: widget.versionMsgList.length>=5?45:60,bottom: 50),
+                    child:
+                    new Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        new Container(margin: EdgeInsets.only(bottom: 10),child: new Text("哇,发现新版本了!",style: TextStyle(fontSize: 16/scale),),),
+                        new Container(height:widget.versionMsgList.length>=5? 90:60,child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: widget.versionMsgList.length,
+                          itemBuilder: (context,index){
+                            return new Container(
+                                margin: EdgeInsets.only(left: 10),
+                                child: Text.rich(TextSpan(text: widget.versionMsgList[index],style: TextStyle(fontSize: 12/scale,color: Colors.grey),),maxLines: 10,));
+                          },
+                        ),)
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              child: new Column(
-                children: <Widget>[
-                  new Container(
-                    child: new Text(
-                      '新版发布',
-                      style: TextStyle(
-                          fontSize: 20.0 / scale, color: widget.titleColor),
-                    ),
-                    height: 36,
-                    margin: EdgeInsets.only(top: 6),
-                    alignment: Alignment.center,
-                  ),
-                  new Container(
-                    constraints: BoxConstraints(minHeight: widget.minHeight),
-                    child: Column(
-                      children: getVersionLayout(),
-                    ),
-                  ),
-                  getDivider(),
-                  this._buildOperationBar(),
-                ],
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+
+          //上面的logo部分
+          new Positioned(
+              top:100,
+              child:new Image.asset("images/version.png",width: 250/scale,height: 250/scale,scale: scale,)
+          ),
+
+          //右上角X的定义
+          new Positioned(
+              top:220,
+              right: 45,
+              child: new GestureDetector(child: new Container(width: 15,height: 15,child: new Image.asset("images/icon_dissmiss.png",)),
+                onTap: (){
+                  if (widget.mustUpdate) {
+                    NavigatorUtils.popApp();
+                  } else {
+                    Navigator.of(context).pop();
+                  }
+                },
+              )
+          ),
+
+          //进度条的定义
+          new Positioned(
+              left: 40,
+              right: 40,
+              top: widget.versionMsgList.length>=5?450:400,
+              child: widget.isExternalUrl != true?
+              LinearProgressIndicator(
+                backgroundColor: widget.buttonColor,
+                valueColor:
+                AlwaysStoppedAnimation<Color>(widget.titleColor),
+                value: widget.rate,
+              )
+                  : new SizedBox(height: 0.1,)),
+
+          //立即下载按钮的定义
+          new Positioned(
+              top:widget.versionMsgList.length>=5?500-widget.barHeight/2:475-widget.barHeight,
+              child:
+              new Container(
+                alignment: Alignment.center,
+                height: widget.barHeight,
+                width: 200,
+                margin: EdgeInsets.only(left: 20,right: 20),
+                child: new GestureDetector(
+                    onTap: () {
+                      //开始下载
+                      if (widget.isExternalUrl == false) {
+                        downloadFile(widget.url);
+                      } else {
+                        //跳转到外部浏览器下载
+                        NavigatorUtils.launchInBrowser(widget.url);
+                      }
+                    },child: ButtonFactory.getRoundLargeBtn(
+                    context,
+                    text: "立即更新",
+                    highlightGradientColors: [
+                      Color.fromRGBO(156, 124, 254, 1),
+                      Color.fromRGBO(103, 104, 254, 1)
+                    ],
+                    textColor: Colors.white,
+                    fontSize: 18,
+                    height: widget.barHeight,
+                    radius: widget.barHeight / 2,
+                    onTap: (){
+                      //开始下载
+                      if (widget.isExternalUrl == false) {
+                        downloadFile(widget.url);
+                      } else {
+                        //跳转到外部浏览器下载
+                        NavigatorUtils.launchInBrowser(widget.url);
+                      }
+                    }
+                )),
+              )
+          ),
+        ],
       ),
-      onWillPop: () {
-        if (widget.mustUpdate) {
-          NavigatorUtils.popApp();
-        } else {
-          Navigator.of(context).pop();
-        }
-      },
     );
   }
 }
@@ -404,9 +487,9 @@ class _iOSVersionUpdateWidgetState extends State<VersionUpdateWidget> {
           widget.mustUpdate
               ? Container()
               : new Expanded(
-                  flex: 1,
-                  child: _getNegativeWidget(),
-                ),
+            flex: 1,
+            child: _getNegativeWidget(),
+          ),
           new Expanded(
             flex: 1,
             child: _getPositiveWidget(),
@@ -420,7 +503,7 @@ class _iOSVersionUpdateWidgetState extends State<VersionUpdateWidget> {
         color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius:
-              BorderRadius.only(bottomLeft: Radius.circular(widget.radius)),
+          BorderRadius.only(bottomLeft: Radius.circular(widget.radius)),
         ),
         child: Container(
           alignment: Alignment.center,
@@ -446,8 +529,8 @@ class _iOSVersionUpdateWidgetState extends State<VersionUpdateWidget> {
         shape: RoundedRectangleBorder(
           borderRadius: widget.mustUpdate
               ? BorderRadius.only(
-                  bottomLeft: Radius.circular(widget.radius),
-                  bottomRight: Radius.circular(widget.radius))
+              bottomLeft: Radius.circular(widget.radius),
+              bottomRight: Radius.circular(widget.radius))
               : BorderRadius.only(bottomRight: Radius.circular(widget.radius)),
         ),
         child: Container(
@@ -457,17 +540,17 @@ class _iOSVersionUpdateWidgetState extends State<VersionUpdateWidget> {
               child: Center(
                 child: Text('更新',
                     style:
-                        TextStyle(color: Colors.white, fontSize: 16.0 / scale)),
+                    TextStyle(color: Colors.white, fontSize: 16.0 / scale)),
               ),
               onTap: () {
                 NavigatorUtils.gotoAppstore(context, widget.url);
               },
               borderRadius: widget.mustUpdate
                   ? BorderRadius.only(
-                      bottomLeft: Radius.circular(widget.radius),
-                      bottomRight: Radius.circular(widget.radius))
+                  bottomLeft: Radius.circular(widget.radius),
+                  bottomRight: Radius.circular(widget.radius))
                   : BorderRadius.only(
-                      bottomRight: Radius.circular(widget.radius))),
+                  bottomRight: Radius.circular(widget.radius))),
         ));
   }
 
