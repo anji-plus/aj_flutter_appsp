@@ -37,11 +37,25 @@
           result([weakSelf formateDictToJSonString:errorData]);
       }];
       
+    } else if ([@"launchUrl" isEqualToString:call.method]) {
+    //跳转外部链接
+        NSDictionary *arguments = [call arguments];
+        NSString *utlString = arguments[@"url"];
+        [self launchURL:utlString result:result];
+      
     } else {
       result(FlutterMethodNotImplemented);
     }
 }
 
+//跳转
+- (void)launchURL:(NSString *)urlString result:(FlutterResult)result {
+    NSURL *url = [NSURL URLWithString:urlString];
+    if([[UIApplication sharedApplication] canOpenURL:url]){
+        [[UIApplication sharedApplication] openURL:url];
+    }
+    result(@"");
+}
 //字典转jsonstring
 - (NSString *)formateDictToJSonString:(NSDictionary*) dict {
     NSError * error = nil;
