@@ -5,8 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:aj_flutter_appsp_example/commons.dart';
-
 // ignore: must_be_immutable
 class NoticeDialog extends Dialog {
   SpNoticeModelItem noticeItem;
@@ -69,10 +67,6 @@ class NoticeWidget extends StatefulWidget {
 }
 
 class _NoticeWidgetState extends State<NoticeWidget> {
-  static const apkInstallChannel =
-      const MethodChannel(Commons.apkinstallChannel);
-  static const String apkInstallMethod = Commons.apkInstallMethod;
-
   @override
   void initState() {
     super.initState();

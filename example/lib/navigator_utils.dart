@@ -4,13 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:aj_flutter_appsp/aj_flutter_appsp_lib.dart';
-import 'commons.dart';
 
 class NavigatorUtils {
-  static const apkInstallChannel =
-      const MethodChannel(Commons.apkinstallChannel);
-  static const String apkInstallMethod = Commons.apkInstallMethod;
-
   static List<String> getMsgList(String releaseLog, {String split}) {
     List<String> list = [];
     if (releaseLog != null) {

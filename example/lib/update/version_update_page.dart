@@ -33,24 +33,27 @@ enum UpdateType {
 }
 
 class _VersionUpdateState extends State<VersionUpdateWidget> {
-
   @override
   void initState() {
     super.initState();
   }
 
-  _update(UpdateType updateType) async {
+  ///[toast] 是否需要弹出提示，在进入APP首页时，不需要提示
+  ///真实场景只需要UpdateType.Normal，其他的都是模拟，需注意
+  _update(UpdateType updateType, {bool toast = false}) async {
     //无需改造数据，用服务器返回数据，下面的都是模拟的数据
     //ignore
-    SpRespUpdateModel updateModel =
-        await AjFlutterAppSp.getUpdateModel();
+    SpRespUpdateModel updateModel = await AjFlutterAppSp.getUpdateModel();
     if (!mounted) {
       return;
     }
     if (updateModel == null) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text("没有更新信息")),
-      );
+      if (toast) {
+        //也可以用Toast，这里不引入第三方插件
+        Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text("没有更新信息")),
+        );
+      }
       return;
     }
     print("spUpdateModel is $updateModel ");
@@ -60,15 +63,18 @@ class _VersionUpdateState extends State<VersionUpdateWidget> {
     }
 
     if (errorMsg != null) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text(errorMsg)),
-      );
+      if (toast) {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text(errorMsg)),
+        );
+      }
     } else {
-      _handleUpdate(updateModel, updateType);
+      _handleUpdate(updateModel, updateType, toast: toast);
     }
   }
 
-  void _handleUpdate(SpRespUpdateModel respModel, UpdateType updateType) {
+  void _handleUpdate(SpRespUpdateModel respModel, UpdateType updateType,
+      {bool toast = false}) {
     if (respModel == null) {
       return;
     }
@@ -76,9 +82,11 @@ class _VersionUpdateState extends State<VersionUpdateWidget> {
     bool isExternalUrl = true;
     UpdateModel updateModel = respModel.repData;
     if (updateModel == null) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text("当前为最新版本")),
-      );
+      if (toast) {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text("当前为最新版本")),
+        );
+      }
       return;
     }
     //apk结尾的默认为可直接下载，否认当作一个外部网页
@@ -119,9 +127,11 @@ class _VersionUpdateState extends State<VersionUpdateWidget> {
       }
     }
     if (updateModel.showUpdate != null && !updateModel.showUpdate) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text("当前为最新版本")),
-      );
+      if (toast) {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text("当前为最新版本")),
+        );
+      }
       return;
     }
     _versionUpdate(
