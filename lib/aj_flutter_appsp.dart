@@ -40,9 +40,15 @@ class AjFlutterAppSp {
   }
 
   ///版本升级
-  static Future<String> installApk(Map map) async {
+  static Future<String> installApk({String path}) async {
     final String data =
-        await _channel.invokeMethod('installApk', map);
+        await _channel.invokeMethod('installApk', {'path': path});
+    return data;
+  }
+
+  ///iOS跳转AppStore
+  static Future<String> launchUrl({String url}) async {
+    final String data = await _channel.invokeMethod('launchUrl', {'url': url});
     return data;
   }
 }

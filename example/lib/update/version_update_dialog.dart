@@ -299,7 +299,7 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
 
   _pushAndInstall() async {
     try {
-      await AjFlutterAppSp.installApk(_fileMap);
+      await AjFlutterAppSp.installApk(path: _fileMap['path']);
     } on PlatformException catch (e) {
       print("dart -PlatformException ");
     } finally {}

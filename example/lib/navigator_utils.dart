@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:aj_flutter_appsp/aj_flutter_appsp_lib.dart';
 import 'commons.dart';
 
 class NavigatorUtils {
@@ -36,7 +36,7 @@ class NavigatorUtils {
   * */
   static Future gotoAppstore(BuildContext context, String appurl) async {
     Navigator.pop(context);
-    apkInstallChannel.invokeMethod(Commons.iOSInstallMethod, {'url': appurl});
+    await AjFlutterAppSp.launchUrl(url: appurl);
   }
 
   static Future push(BuildContext context, Widget page,
