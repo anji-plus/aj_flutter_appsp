@@ -214,7 +214,7 @@ class _VersionUpdateState extends State<VersionUpdateWidget> {
           ),
           Center(
             child: Styles.getBtn(context, '检查版本更新', () {
-              _update(UpdateType.Normal);
+              _update(UpdateType.Normal, toast: true);
             }),
           ),
           SizedBox(

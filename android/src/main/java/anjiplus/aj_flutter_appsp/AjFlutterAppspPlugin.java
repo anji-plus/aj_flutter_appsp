@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.anji.appsp.sdk.AppSpConfig;
@@ -98,12 +99,14 @@ public class AjFlutterAppspPlugin implements MethodCallHandler {
      * @param debug  日志开关是否打开，默认打开
      */
     private void init(String appKey, String host, boolean debug) {
-        AppSpConfig.getInstance()
-                .init(registrar.activity(), appKey)
-                //可修改基础请求地址
-                .setHost(host)
-                //正式环境可以禁止日志输出，通过Tag APP-SP过滤看日志
-                .setDebuggable(debug)
+        AppSpConfig config = AppSpConfig.getInstance();
+        config.init(registrar.activity(), appKey);
+        //当host未设置时，用默认的生产地址
+        if (!TextUtils.isEmpty(host)) {
+            config.setHost(host);
+        }
+        //正式环境可以禁止日志输出，通过Tag APP-SP过滤看日志
+        config.setDebuggable(debug)
                 //务必要初始化，否则后面请求会报错
                 .deviceInit();
         MethodResultWrapper wrapper = peekWraper();
@@ -199,9 +202,8 @@ public class AjFlutterAppspPlugin implements MethodCallHandler {
     }
 
     /**
-     *
      * @param path apk的存储路径
-     * 安装apk
+     *             安装apk
      */
     private void installApk(String path) {
         boolean installAllowed = true;

@@ -437,38 +437,24 @@ class _VersionUpdateWidgetState extends State<VersionUpdateWidget> {
                   height: widget.barHeight,
                   width: 200,
                   margin: EdgeInsets.only(left: 20, right: 20),
-                  child: new GestureDetector(
-                      onTap: () {
-                        //开始下载
-                        if (widget.isExternalUrl == false) {
-                          downloadFile(widget.url);
-                        } else {
-                          //跳转到外部浏览器下载
-                          NavigatorUtils.launchInBrowser(widget.url);
-                        }
-                      },
-                      child: ButtonFactory.getRoundLargeBtn(context,
-                          text: "立即更新",
-                          highlightGradientColors: [
-                            Color.fromRGBO(156, 124, 254, 1),
-                            Color.fromRGBO(103, 104, 254, 1)
-                          ],
-                          textColor: Colors.white,
-                          fontSize: 18,
-                          height: widget.barHeight,
-                          radius: widget.barHeight / 2, onTap: () {
-                        //开始下载
-                        if (widget.isExternalUrl == false) {
-                          if (Platform.isAndroid) {
-                            downloadFile(widget.url);
-                          } else {
-                            NavigatorUtils.gotoAppstore(context, widget.url);
-                          }
-                        } else {
-                          //跳转到外部浏览器下载
-                          NavigatorUtils.launchInBrowser(widget.url);
-                        }
-                      })),
+                  child: ButtonFactory.getRoundLargeBtn(context,
+                      text: "立即更新",
+                      highlightGradientColors: [
+                        Color.fromRGBO(156, 124, 254, 1),
+                        Color.fromRGBO(103, 104, 254, 1)
+                      ],
+                      textColor: Colors.white,
+                      fontSize: 18,
+                      height: widget.barHeight,
+                      radius: widget.barHeight / 2, onTap: () {
+                    //开始下载
+                    if (widget.isExternalUrl == false) {
+                      downloadFile(widget.url);
+                    } else {
+                      //跳转到外部浏览器下载
+                      NavigatorUtils.launchInBrowser(widget.url);
+                    }
+                  }),
                 )),
           ],
         ),
