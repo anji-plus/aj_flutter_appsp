@@ -26,7 +26,7 @@
       [[AppSpService shareService] checkVersionUpdate:^(NSDictionary *repData) {
           result([weakSelf formateDictToJSonString:repData]);
       } withFailure:^(NSDictionary *repData) {
-          result([weakSelf formateDictToJSonString:errorData]);
+          result([weakSelf formateDictToJSonString:repData]);
       }];
     } else if ([call.method isEqualToString:@"getNoticeModel"]) {
     //获取公告信息
@@ -34,7 +34,7 @@
       [[AppSpService shareService] getNoticeInfo:^(NSDictionary *repData) {
           result([weakSelf formateDictToJSonString:repData]);
       } withFailure:^(NSDictionary *repData) {
-          result([weakSelf formateDictToJSonString:errorData]);
+          result([weakSelf formateDictToJSonString:repData]);
       }];
       
     } else if ([@"launchUrl" isEqualToString:call.method]) {
