@@ -1,5 +1,5 @@
 #import "AjFlutterAppspPlugin.h"
-#import <AJSDKAppSp/AJSDKAppSp-Swift.h>
+#import <AJSDKAppSpOc/AppSpService.h>
 @implementation AjFlutterAppspPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   FlutterMethodChannel* channel = [FlutterMethodChannel
@@ -16,24 +16,24 @@
         NSString *host = call.arguments[@"host"];
         NSString *debug = call.arguments[@"debug"];
         if (host != nil && host.length > 0) {
-            [[AppSpService shareService] initConfigWithAppkey:appKey debug:debug :host];
+            [[AppSpService shareService] initConfig:appKey withDebug:debug withHost:host];
         } else {
-            [[AppSpService shareService] initConfigWithAppkey:appKey debug:debug :nil];
+            [[AppSpService shareService] initConfig:appKey withDebug:debug withHost:nil];
         }
     } else if ([call.method isEqualToString: @"getUpdateModel"]) {
     // 版本更新
       __weak typeof(self) weakSelf = self;
-      [[AppSpService shareService] checkVersionUpdateWithSuccess:^(NSDictionary* repData) {
+      [[AppSpService shareService] checkVersionUpdate:^(NSDictionary *repData) {
           result([weakSelf formateDictToJSonString:repData]);
-      } failure:^(NSDictionary* errorData) {
+      } withFailure:^(NSDictionary *repData) {
           result([weakSelf formateDictToJSonString:errorData]);
       }];
     } else if ([call.method isEqualToString:@"getNoticeModel"]) {
     //获取公告信息
       __weak typeof(self) weakSelf = self;
-      [[AppSpService shareService] getNoticeInfoWithSuccess:^(NSDictionary* repData) {
+      [[AppSpService shareService] getNoticeInfo:^(NSDictionary *repData) {
           result([weakSelf formateDictToJSonString:repData]);
-      } failure:^(NSDictionary* errorData) {
+      } withFailure:^(NSDictionary *repData) {
           result([weakSelf formateDictToJSonString:errorData]);
       }];
       
